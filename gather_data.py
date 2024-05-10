@@ -1,13 +1,7 @@
 import asyncio
 import os
-
-import requests
 import json
-
-
 from bungio import Client
-from bungio.http import HttpClient
-from bungio.http.routes import Destiny2RouteHttpRequests
 from bungio.models import BungieMembershipType, DestinyActivityModeType, DestinyUser
 from dotenv import load_dotenv
 
