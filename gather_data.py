@@ -6,6 +6,8 @@ import json
 
 
 from bungio import Client
+from bungio.http import HttpClient
+from bungio.http.routes import Destiny2RouteHttpRequests
 from bungio.models import BungieMembershipType, DestinyActivityModeType, DestinyUser
 from dotenv import load_dotenv
 
@@ -19,26 +21,22 @@ client = Client(
 )
 
 
-async def gather_data(bungie_id):
+async def gather_raid_data(bungie_id):
     # create a user obj using a known bungie id
     user = DestinyUser(membership_id=int(bungie_id), membership_type=BungieMembershipType.TIGER_STEAM)
     # iterate thought the raids that user has played
-    with open(f"{bungie_id}.json", "w") as outfile:
+    with open(f"{bungie_id}_raid.json", "w") as outfile:
         response_list = []
         print("Started fetching data, this may take a while")
         async for activity in user.yield_activity_history(mode=DestinyActivityModeType.RAID):
 
-            # Running a raw request to bungie api, because I couldn't find how to do it with the wrapper
-            req = requests.get(
-                f"https://www.bungie.net/Platform/Destiny2/Stats/PostGameCarnageReport/{activity.activity_details.instance_id}/",
-                headers={"X-API-KEY":os.getenv("BUNGIE_API_KEY")}
-            )
-            response = json.loads(req.text)
-            response_list.append(response)
-            break
+            # Running a raw request through the wrapper for saving purposes
+            report = await client.http.get_post_game_carnage_report(activity.activity_details.instance_id)
+            response_list.append(report)
+
         print("Data collected")
         outfile.write(json.dumps(response_list, indent=4))
         print("File written")
 
 if __name__ == "__main__":
-    asyncio.run(gather_data(4611686018467273361))  # Put your own bungie_id here
+    asyncio.run(gather_raid_data(4611686018467273361))  # Put your own bungie_id here
