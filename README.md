@@ -24,8 +24,4 @@ With over 300 recorded raid activities, the file size is 26.5MB. This is saved s
 # In the future
 There can always be more analysis on the data.
 
-Currently we refresh the whole file, need to make it so that you can update the file based on the last raid marked there.
-
 This app can be extended to dungeons (and in theory to crucible and more).
-
-One could learn to use either the wrapper or bungie api properly instead of taking the best of both worlds

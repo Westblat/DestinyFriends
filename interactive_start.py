@@ -12,7 +12,7 @@ async def interactive_start():
         if Path(file_location).is_file():
             update = input("File already found, do you want to update or analyze existing file? (update / analyze)\n")
             if update == "update":
-                await gather_raid_data(bungie_id)
+                await gather_raid_data(bungie_id, True)
         else:
             await gather_raid_data(bungie_id)
         analyze(f"{bungie_id}.json")
